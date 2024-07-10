@@ -12,7 +12,11 @@ spring:
     password:
     driver-class-name: org.h2.Driver
     sql.init.mode: always
-
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 30MB
+#      location: C:\\Users\user\Documents\filetest
 
   jpa:
     open-in-view: true
@@ -36,3 +40,8 @@ spring:
       content-type: text/html  # 콘텐츠 타입 설정
     prefix: classpath:/templates/  # 템플릿 파일 위치
     suffix: .html  # 템플릿 파일 확장자
+
+org:
+  zerock:
+    upload:
+      path: C:\\Users\user\Documents\filetest
