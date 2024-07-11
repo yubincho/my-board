@@ -73,15 +73,18 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="question : ${questionList.dtoList}">
-            <th scope="row">
-                <a th:href="@{/question/read/{id}(id = ${question.id}, page=${questionList.page})}">[[${question.id}]]</a>
-            </th>
-            <td th:text="${question.subject}"></td>
-            <!--                <td th:text="${question.content}"></td>-->
-            <td th:text="${question.writer.username}"></td>
-            <td th:text="${question.createdAt}"></td>
-        </tr>
+            <tr th:each="question : ${questionList.dtoList}">
+                <th scope="row">
+                    <a th:href="@{/question/read/{id}(id = ${question.id}, page=${questionList.page})}">[[${question.id}]]</a>
+                </th>
+                <td th:text="${question.subject}"></td>
+                <td>
+                    <img th:if="${question.thumbnailUrl != null}" th:src="@{${question.thumbnailUrl}}" alt="Thumbnail" style="max-width: 100px; max-height: 100px;">
+                </td>
+                <!--                <td th:text="${question.content}"></td>-->
+                <td th:text="${question.writer.username}"></td>
+                <td th:text="${question.createdAt}"></td>
+            </tr>
         </tbody>
     </table>
 

@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,6 +56,41 @@ public class FileUploadController {
         // JSON 형태로 반환
         return ResponseEntity.ok("{\"url\":\"" + fileUrls.toString().trim() + "\"}");
     }
+
+
+    @PostMapping("/uploadThumbnail")
+    public ResponseEntity<?> uploadThumbnail(@RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No file uploaded");
+        }
+
+        String originalName = file.getOriginalFilename();
+        String uuid = UUID.randomUUID().toString();
+        String extension = originalName.substring(originalName.lastIndexOf("."));
+        String savedName = uuid + extension;
+
+        try {
+            // 원본 이미지 저장
+            File saveFile = new File(uploadPath, savedName);
+            file.transferTo(saveFile);
+
+            // 썸네일 이미지 생성 및 저장
+            String thumbnailName = "s_" + savedName;
+            File thumbnailFile = new File(uploadPath, thumbnailName);
+            Thumbnails.of(saveFile)
+                    .size(200, 200) // 썸네일 크기 조정
+                    .toFile(thumbnailFile);
+
+            String thumbnailUrl = "/files/" + thumbnailName;
+
+            // JSON 형태로 반환
+            return ResponseEntity.ok("{\"url\":\"" + thumbnailUrl + "\"}");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload thumbnail");
+        }
+    }
+
 }
 
 

@@ -24,6 +24,8 @@ public class Image {
 
     private String path;
 
+    private boolean isThumbnail;
+
     @ManyToOne
     @JoinColumn(name = "question_id")
     private Question question;
@@ -32,5 +34,15 @@ public class Image {
     @JoinColumn(name = "answer_id")
     private Answer answer;
 
+
+    public static Image createImage(String uuid, String imgName, String path, Question question, boolean isThumbnail) {
+        Image image = new Image();
+        image.uuid = uuid;
+        image.imgName = imgName;
+        image.path = path;
+        image.question = question;
+        image.isThumbnail = isThumbnail;
+        return image;
+    }
 
 }

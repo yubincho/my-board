@@ -28,6 +28,8 @@ public class QImage extends EntityPathBase<Image> {
 
     public final StringPath imgName = createString("imgName");
 
+    public final BooleanPath isThumbnail = createBoolean("isThumbnail");
+
     public final StringPath path = createString("path");
 
     public final QQuestion question;

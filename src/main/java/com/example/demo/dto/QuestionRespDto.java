@@ -2,6 +2,7 @@ package com.example.demo.dto;
 
 import com.example.demo.entity.Question;
 import com.example.demo.entity.User;
+import com.example.demo.entity.Image;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,14 +24,22 @@ public class QuestionRespDto {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) // ISO 8601 형식 지정
     private LocalDateTime createdAt;
+    private String thumbnailUrl;
 
     public static QuestionRespDto toDto(Question question) {
+        String thumbnailUrl = question.getImages().stream()
+                .filter(Image::isThumbnail)
+                .map(image -> "/files/" + image.getImgName())
+                .findFirst() // 첫번째 이미지를 썸네일로.
+                .orElse(null);
+
         return QuestionRespDto.builder()
                 .id(question.getId())
                 .subject(question.getSubject())
                 .content(question.getContent())
                 .writer(question.getUser())
                 .createdAt(question.getCreatedAt())
+                .thumbnailUrl(thumbnailUrl)
                 .build();
     }
 }
